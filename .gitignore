@@ -58,3 +58,5 @@ dist/
 build/
 pip-log.txt
 pip-delete-this-directory.txt
+
+docs/individual_notebooks
