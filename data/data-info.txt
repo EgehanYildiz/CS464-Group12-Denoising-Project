@@ -1,0 +1,24 @@
+CIFAR-10 Data Information
+
+Dataset:
+- CIFAR-10 contains 60,000 32x32 color images in 10 classes.
+
+Preprocessing:
+- The images are normalized to the range [0,1] by dividing pixel values by 255.
+- Gaussian noise is added to create noisy-clean image pairs for denoising.
+
+Noise Parameters:
+- Type: Gaussian (Normal) noise
+- Mean: 0.0
+- Standard Deviation (σ): 0.1
+
+Files:
+- cifar10_train.npz: Clean training data downloaded from CIFAR-10.
+- cifar10_test.npz: Clean test data downloaded from CIFAR-10.
+- cifar10_train_noisy.npz: Contains 'x_train_clean', 'x_train_noisy', and 'y_train'.
+- cifar10_test_noisy.npz: Contains 'x_test_clean', 'x_test_noisy', and 'y_test'.
+
+Usage:
+- These files are used to train denoising models (e.g., convolutional autoencoders).
+- Noisy images (x_train_noisy, x_test_noisy) serve as inputs.
+- Clean images (x_train_clean, x_test_clean) are the target outputs.

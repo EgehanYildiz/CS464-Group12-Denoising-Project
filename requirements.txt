@@ -1,0 +1,11 @@
+torch
+torchvision
+matplotlib
+numpy
+scikit-learn
+jupyter
+pandas
+seaborn
+tensorflow-macos; platform_system == "Darwin"
+tensorflow-metal; platform_system == "Darwin"
+tensorflow; platform_system != "Darwin"

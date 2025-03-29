@@ -1,0 +1,60 @@
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Project-specific data & outputs
+cifar10_data/
+checkpoints/
+*.npz
+*.h5
+*.pkl
+*.pt
+*.onnx
+*.pth
+*.log
+
+# Temporary & test files
+tmp/
+temp/
+*.log
+*.tmp
+*.bak
+*.swp
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Environment variables
+.env
+.env.*
+
+# Coverage & test output
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Package management leftovers
+*.egg-info/
+dist/
+build/
+pip-log.txt
+pip-delete-this-directory.txt
