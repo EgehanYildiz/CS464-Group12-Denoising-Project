@@ -23,6 +23,7 @@ checkpoints/
 *.onnx
 *.pth
 *.log
+data/cifar10_data/   
 
 # Temporary & test files
 tmp/

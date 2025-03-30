@@ -1,0 +1,32 @@
+KNN Denoising Results on Noisy CIFAR-10 (Gaussian noise) 
+==================================================
+
+Metrics: PSNR (Peak Signal-to-Noise Ratio, dB - higher is better), SSIM (Structural Similarity Index - higher is better, max 1), MSE (Mean Squared Error - lower is better).
+
+--- Pixel-level KNN Denoising ---
+Pixel-level KNN, K=3: PSNR=21.93 dB, SSIM=0.9413, MSE=0.006421
+For K=3, pixel-level averaging uses the 3 most similar nearby pixels to denoise each pixel. A small K retains more image detail but might leave some noise. The resulting PSNR of 21.93 dB indicates the denoised image is much closer to the original (higher is better). SSIM of 0.941 (on a 0-1 scale) implies a high structural similarity to the clean image. MSE of 0.006421 shows the average squared error per pixel; lower values signify better fidelity. 
+
+Pixel-level KNN, K=5: PSNR=22.58 dB, SSIM=0.9463, MSE=0.005530
+For K=5, pixel-level averaging uses the 5 most similar nearby pixels to denoise each pixel. The resulting PSNR of 22.58 dB indicates the denoised image is much closer to the original (higher is better). SSIM of 0.946 (on a 0-1 scale) implies a high structural similarity to the clean image. MSE of 0.005530 shows the average squared error per pixel; lower values signify better fidelity. 
+
+Pixel-level KNN, K=7: PSNR=23.07 dB, SSIM=0.9494, MSE=0.004941
+For K=7, pixel-level averaging uses the 7 most similar nearby pixels to denoise each pixel. The resulting PSNR of 23.07 dB indicates the denoised image is much closer to the original (higher is better). SSIM of 0.949 (on a 0-1 scale) implies a high structural similarity to the clean image. MSE of 0.004941 shows the average squared error per pixel; lower values signify better fidelity. 
+
+Pixel-level KNN, K=10: PSNR=23.62 dB, SSIM=0.9521, MSE=0.004359
+For K=10, pixel-level averaging uses the 10 most similar nearby pixels to denoise each pixel. A larger K smooths more noise but can blur fine details. The resulting PSNR of 23.62 dB indicates the denoised image is much closer to the original (higher is better). SSIM of 0.952 (on a 0-1 scale) implies a high structural similarity to the clean image. MSE of 0.004359 shows the average squared error per pixel; lower values signify better fidelity. 
+
+--- Patch-level KNN Denoising ---
+Patch-level KNN, K=3: PSNR=23.06 dB, SSIM=0.9469, MSE=0.004978
+For K=3, patch-level averaging uses the 3 most similar patches to denoise each pixel. A small K retains more image detail but might leave some noise. The resulting PSNR of 23.06 dB indicates the denoised image is much closer to the original (higher is better). SSIM of 0.947 (on a 0-1 scale) implies a high structural similarity to the clean image. MSE of 0.004978 shows the average squared error per pixel; lower values signify better fidelity. 
+
+Patch-level KNN, K=5: PSNR=24.08 dB, SSIM=0.9549, MSE=0.003947
+For K=5, patch-level averaging uses the 5 most similar patches to denoise each pixel. The resulting PSNR of 24.08 dB indicates the denoised image is much closer to the original (higher is better). SSIM of 0.955 (on a 0-1 scale) implies a high structural similarity to the clean image. MSE of 0.003947 shows the average squared error per pixel; lower values signify better fidelity. 
+
+Patch-level KNN, K=7: PSNR=24.60 dB, SSIM=0.9581, MSE=0.003509
+For K=7, patch-level averaging uses the 7 most similar patches to denoise each pixel. The resulting PSNR of 24.60 dB indicates the denoised image is much closer to the original (higher is better). SSIM of 0.958 (on a 0-1 scale) implies a high structural similarity to the clean image. MSE of 0.003509 shows the average squared error per pixel; lower values signify better fidelity. 
+
+Patch-level KNN, K=10: PSNR=25.02 dB, SSIM=0.9602, MSE=0.003195
+For K=10, patch-level averaging uses the 10 most similar patches to denoise each pixel. A larger K smooths more noise but can blur fine details. The resulting PSNR of 25.02 dB indicates the denoised image is much closer to the original (higher is better). SSIM of 0.960 (on a 0-1 scale) implies a high structural similarity to the clean image. MSE of 0.003195 shows the average squared error per pixel; lower values signify better fidelity. 
+
+Experiment complete. The above results show the trade-off between noise reduction and detail preservation for different K values and methods.
