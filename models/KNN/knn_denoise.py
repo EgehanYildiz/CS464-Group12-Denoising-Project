@@ -4,6 +4,10 @@ import numpy as np
 import math
 from skimage.metrics import structural_similarity as compare_ssim
 from torchvision import datasets, transforms
+import torch
+
+# Set device to GPU if available, else CPU
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def add_gaussian_noise(images, sigma=0.1):
     """
@@ -22,56 +26,79 @@ def add_gaussian_noise(images, sigma=0.1):
 
 def knn_denoise_image(image, K=5, patch_size=3, window_size=7):
     """
-    Apply KNN-based denoising to a single image.
-    
-    For each pixel, extract a patch and search in a local window (clamped to valid indices)
-    for the K most similar patches (using Euclidean distance). The denoised pixel is the 
-    average of the center pixels of these K patches.
-    
+    Apply KNN-based denoising to a single image using GPU acceleration.
+
     Args:
         image (np.array): Noisy image with shape (H, W, C) normalized in [0,1].
         K (int): Number of nearest neighbor patches to average.
         patch_size (int): Size of the patch (odd number).
         window_size (int): Size of the search window (odd number).
-    
+
     Returns:
         np.array: Denoised image with the same shape as input.
     """
     H, W, C = image.shape
     pad = patch_size // 2
     pad_w = window_size // 2
-    # Pad the image to handle borders.
-    padded = np.pad(image, ((pad, pad), (pad, pad), (0, 0)), mode='reflect')
-    denoised = np.zeros_like(image)
-    
-    for i in range(H):
-        for j in range(W):
-            # Reference patch from the padded image.
-            ref_patch = padded[i:i+patch_size, j:j+patch_size, :]
-            i_center, j_center = i + pad, j + pad
-            
-            # Clamp the search window to valid indices.
-            i_start = max(pad, i_center - pad_w)
-            i_end   = min(H + pad, i_center + pad_w + 1)
-            j_start = max(pad, j_center - pad_w)
-            j_end   = min(W + pad, j_center + pad_w + 1)
-            
-            distances = []
-            candidates = []
-            for ii in range(i_start, i_end):
-                for jj in range(j_start, j_end):
-                    # Extract candidate patch.
-                    candidate_patch = padded[ii - pad:ii + pad + 1, jj - pad:jj + pad + 1, :]
-                    # Compute Euclidean distance between patches.
-                    d = np.linalg.norm(ref_patch - candidate_patch)
-                    distances.append(d)
-                    # Save the center pixel of the candidate patch.
-                    candidates.append(padded[ii, jj, :])
-            distances = np.array(distances)
-            candidates = np.array(candidates)  # Shape: (num_candidates, C)
-            knn_indices = np.argsort(distances)[:K]
-            denoised[i, j, :] = np.mean(candidates[knn_indices], axis=0)
-    return denoised
+
+    # Convert NumPy array to PyTorch tensor and move to GPU
+    image_tensor = torch.from_numpy(image).to(device)
+
+    # Pad the image with reflection
+    padded = torch.nn.functional.pad(
+        image_tensor.permute(2, 0, 1)[None, ...], 
+        (pad, pad, pad, pad), 
+        mode='reflect'
+    )[0].permute(1, 2, 0)
+
+    # Extract all patches
+    patches = torch.as_strided(
+        padded,
+        size=(H, W, patch_size, patch_size, C),
+        stride=(padded.stride(0), padded.stride(1), padded.stride(0), padded.stride(1), padded.stride(2))
+    )
+
+    # Define search window offsets
+    num_di = 2 * pad_w + 1
+    num_dj = 2 * pad_w + 1
+    di, dj = torch.meshgrid(
+        torch.arange(-pad_w, pad_w + 1, device=device),
+        torch.arange(-pad_w, pad_w + 1, device=device),
+        indexing='ij'
+    )
+
+    # Compute candidate indices
+    i_indices = torch.arange(H, device=device).view(-1, 1, 1, 1)
+    j_indices = torch.arange(W, device=device).view(1, -1, 1, 1)
+    i_candidates = i_indices + di[None, None, :, :]
+    j_candidates = j_indices + dj[None, None, :, :]
+    i_candidates_clamped = torch.clamp(i_candidates, 0, H - 1)
+    j_candidates_clamped = torch.clamp(j_candidates, 0, W - 1)
+
+    # Extract candidate patches
+    candidate_patches = patches[i_candidates_clamped, j_candidates_clamped]
+
+    # Compute distances
+    ref_patches = patches[:, :, None, None, :, :, :]
+    diff = candidate_patches - ref_patches
+    distances = (diff ** 2).sum(dim=[-3, -2, -1])
+
+    # Find K nearest neighbors
+    num_candidates = num_di * num_dj
+    distances_flat = distances.view(H, W, num_candidates)
+    _, topk_indices = torch.topk(distances_flat, K, dim=2, largest=False)
+
+    # Get indices of K nearest patches
+    i_candidates_flat = i_candidates_clamped.view(H, W, num_candidates)
+    j_candidates_flat = j_candidates_clamped.view(H, W, num_candidates)
+    ii = torch.gather(i_candidates_flat, dim=2, index=topk_indices)
+    jj = torch.gather(j_candidates_flat, dim=2, index=topk_indices)
+
+    # Compute denoised image
+    center_pixels = image_tensor[ii, jj, :]
+    denoised = center_pixels.mean(dim=2)
+
+    return denoised.cpu().numpy()
 
 def denoise_dataset_for_k(npz_file, K, patch_size=3, window_size=7):
     """
@@ -137,7 +164,7 @@ def run_experiments():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
-    # Define K values to experiment with.
+    # Define K values to experiment with
     k_values = [3, 5, 7, 10, 15]
     patch_size = 3
     window_size = 7
@@ -161,7 +188,7 @@ def run_experiments():
         else:
             results[K] = None
 
-    # Save experiment results in a training log.
+    # Save experiment results in a training log
     log_file = os.path.join('models', 'KNN', 'training_log.txt')
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
     with open(log_file, 'w') as f:
