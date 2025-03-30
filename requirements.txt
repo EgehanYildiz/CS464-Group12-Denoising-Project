@@ -3,6 +3,7 @@ torchvision
 matplotlib
 numpy
 scikit-learn
+scikit-image
 jupyter
 pandas
 seaborn
