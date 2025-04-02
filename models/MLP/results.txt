@@ -1,0 +1,4 @@
+Evaluation Results:
+MSE: 0.063684
+PSNR: 12.51 dB
+SSIM: 0.0482
