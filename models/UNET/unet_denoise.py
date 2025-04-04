@@ -1,123 +1,125 @@
+import os
+import numpy as np
 import torch
 import torch.nn as nn
-import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
 import torchvision.transforms as transforms
-from torch.utils.data import Dataset, DataLoader
-import numpy as np
-from pathlib import Path
+from skimage.metrics import structural_similarity as ssim
+from skimage.metrics import peak_signal_noise_ratio as psnr
+import matplotlib.pyplot as plt
 
-# UNet Model
-def double_conv(in_channels, out_channels):
-    return nn.Sequential(
-        nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1),
-        nn.ReLU(inplace=True),
-        nn.Dropout(0.2),  # Add dropout to prevent overfitting
-        nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1),
-        nn.ReLU(inplace=True)
-    )
-
-
+# ------------------------ UNet Model ------------------------
 class UNet(nn.Module):
-    def __init__(self):
+    def __init__(self, in_channels=3, out_channels=3):
         super(UNet, self).__init__()
-        self.down1 = double_conv(3, 64)
-        self.pool1 = nn.MaxPool2d(2)
-        self.down2 = double_conv(64, 128)
-        self.pool2 = nn.MaxPool2d(2)
-        
-        self.bottleneck = double_conv(128, 256)
-        
-        self.up2 = nn.ConvTranspose2d(256, 128, kernel_size=2, stride=2)
-        self.conv2 = double_conv(256, 128)
-        self.up1 = nn.ConvTranspose2d(128, 64, kernel_size=2, stride=2)
-        self.conv1 = double_conv(128, 64)
-        self.final = nn.Conv2d(64, 3, kernel_size=1)
-        
+
+        def conv_block(in_ch, out_ch):
+            return nn.Sequential(
+                nn.Conv2d(in_ch, out_ch, kernel_size=3, padding=1),
+                nn.ReLU(inplace=True),
+                nn.Conv2d(out_ch, out_ch, kernel_size=3, padding=1),
+                nn.ReLU(inplace=True)
+            )
+
+        def up_block(in_ch, out_ch):
+            return nn.Sequential(
+                nn.ConvTranspose2d(in_ch, out_ch, kernel_size=2, stride=2),
+                nn.ReLU(inplace=True)
+            )
+
+        self.enc1 = conv_block(in_channels, 32)   # 32x32 → 32 channels
+        self.pool1 = nn.MaxPool2d(2)              # → 16x16
+        self.enc2 = conv_block(32, 64)
+        self.pool2 = nn.MaxPool2d(2)              # → 8x8
+
+        self.bottleneck = conv_block(64, 128)
+
+        self.up2 = up_block(128, 64)              # 8x8 → 16x16
+        self.dec2 = conv_block(128, 64)
+        self.up1 = up_block(64, 32)               # 16x16 → 32x32
+        self.dec1 = conv_block(64, 32)
+
+        self.final = nn.Conv2d(32, out_channels, kernel_size=1)
+
     def forward(self, x):
-        d1 = self.down1(x)
-        p1 = self.pool1(d1)
-        d2 = self.down2(p1)
-        p2 = self.pool2(d2)
-        
-        b = self.bottleneck(p2)
-        
-        u2 = self.up2(b)
-        c2 = self.conv2(torch.cat([u2, d2], dim=1))
-        u1 = self.up1(c2)
-        c1 = self.conv1(torch.cat([u1, d1], dim=1))
-        
-        return self.final(c1)
+        e1 = self.enc1(x)
+        e2 = self.enc2(self.pool1(e1))
+        b = self.bottleneck(self.pool2(e2))
+        d2 = self.dec2(torch.cat([self.up2(b), e2], dim=1))
+        d1 = self.dec1(torch.cat([self.up1(d2), e1], dim=1))
+        return self.final(d1)
 
-# Custom Dataset
-class NoisyCIFAR10(Dataset):
-    def __init__(self, clean_images, noisy_images, transform=None):
-        self.clean = clean_images
-        self.noisy = noisy_images
-        self.transform = transform
-    
-    def __len__(self):
-        return len(self.clean)
-    
-    def __getitem__(self, idx):
-        clean_img = self.clean[idx]
-        noisy_img = self.noisy[idx]
-        
-        if self.transform:
-            clean_img = self.transform(clean_img)
-            noisy_img = self.transform(noisy_img)
-        
-        return noisy_img, clean_img
 
-# Load Noisy Data
-def load_data(batch_size=64):
-    transform = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.RandomHorizontalFlip(),
-    transforms.RandomRotation(10)
-])
+# ------------------------ Data Loading ------------------------
+def load_data(data_path, batch_size=64):
+    data = np.load(data_path)
+    x_noisy = torch.tensor(data['x_train_noisy'], dtype=torch.float32).permute(0, 3, 1, 2)
+    x_clean = torch.tensor(data['x_train_clean'], dtype=torch.float32).permute(0, 3, 1, 2)
+    dataset = TensorDataset(x_noisy, x_clean)
+    return DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
-    
-    two_up = Path(__file__).parent.parent.parent
+def load_test_samples(path):
+    data = np.load(path)
+    x_clean = torch.tensor(data['x_test_clean'], dtype=torch.float32).permute(0, 3, 1, 2)
+    x_noisy = torch.tensor(data['x_test_noisy'], dtype=torch.float32).permute(0, 3, 1, 2)
+    return x_noisy, x_clean
 
-    # Construct your full path
-    clean_path = two_up / "cifar10_data" / "cifar10_test_noisy.npz"
-    noisy_path = two_up / "cifar10_data" / "cifar10_train_noisy.npz"
-
-    clean_data = np.load(clean_path)
-    noisy_data = np.load(noisy_path)
-    
-    clean_images = clean_data["x_test_clean"].astype(np.float32)  # Corrected key
-    noisy_images = noisy_data["x_train_noisy"].astype(np.float32)  # Corrected key
-    
-    dataset = NoisyCIFAR10(clean_images, noisy_images, transform=transforms.ToTensor())
-    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    
-    return dataloader
-
-# Train the model
-def train_unet(epochs=10, batch_size=64, lr=0.001):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = UNet().to(device)
-    optimizer = optim.Adam(model.parameters(), lr=lr)
+# ------------------------ Training & Evaluation ------------------------
+def train_model(model, dataloader, epochs=10, lr=1e-3):
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = nn.MSELoss()
-    
-    dataloader = load_data(batch_size)
-    
-    for epoch in range(epochs):
-        model.train()
-        epoch_loss = 0
-        for noisy_imgs, clean_imgs in dataloader:
-            noisy_imgs, clean_imgs = noisy_imgs.to(device), clean_imgs.to(device)
-            optimizer.zero_grad()
-            outputs = model(noisy_imgs)
-            loss = criterion(outputs, clean_imgs)
-            loss.backward()
-            optimizer.step()
-            epoch_loss += loss.item()
-        print(f"Epoch {epoch+1}/{epochs}, Loss: {epoch_loss/len(dataloader):.4f}")
+    model.train()
 
-    return model
+    with open("models/UNET/training_log.txt", "a") as f:
+        for epoch in range(epochs):
+            total_loss = 0
+            for x_noisy, x_clean in dataloader:
+                optimizer.zero_grad()
+                output = model(x_noisy)
+                loss = criterion(output, x_clean)
+                loss.backward()
+                optimizer.step()
+                total_loss += loss.item()
+            avg_loss = total_loss / len(dataloader)
+            print(f"Epoch {epoch+1}/{epochs}, MSE: {avg_loss:.6f}")
+            f.write(f"Epoch {epoch+1}/{epochs}, Loss: {loss.item():.6f}\n")
+            f.flush()
 
-# Run Training
+# ------------------------ Evaluation Metrics ------------------------
+def evaluate_model(model, x_noisy, x_clean, num_samples=10):
+    model.eval()
+    with torch.no_grad():
+        output = model(x_noisy[:num_samples])
+    denoised = output.clamp(0, 1).cpu().numpy()
+    clean = x_clean[:num_samples].cpu().numpy()
+    noisy = x_noisy[:num_samples].cpu().numpy()
+
+    avg_psnr = np.mean([psnr(clean[i].transpose(1, 2, 0), denoised[i].transpose(1, 2, 0)) for i in range(num_samples)])
+    avg_ssim = np.mean([
+    ssim(clean[i].transpose(1, 2, 0), denoised[i].transpose(1, 2, 0), win_size=7, channel_axis=-1, data_range=1.0)
+            for i in range(num_samples)
+        ])
+
+
+    print(f"Average PSNR: {avg_psnr:.2f} dB")
+    print(f"Average SSIM: {avg_ssim:.4f}")
+
+    # Save comparison image
+    fig, axes = plt.subplots(num_samples, 3, figsize=(9, num_samples * 2))
+    for i in range(num_samples):
+        for ax, img, title in zip(axes[i], [clean[i], noisy[i], denoised[i]], ['Original', 'Noisy', 'Denoised']):
+            ax.imshow(np.transpose(img, (1, 2, 0)))
+            ax.set_title(title)
+            ax.axis('off')
+    plt.tight_layout()
+    plt.savefig("comparison.png")
+    print("Comparison image saved as 'comparison.png'.")
+
+# ------------------------ Main ------------------------
 if __name__ == "__main__":
-    trained_model = train_unet()
+    train_loader = load_data("cifar10_data/cifar10_train_noisy.npz", batch_size=64)
+    x_noisy_test, x_clean_test = load_test_samples("cifar10_data/cifar10_test_noisy.npz")
+
+    model = UNet()
+    train_model(model, train_loader, epochs=10)
+    evaluate_model(model, x_noisy_test, x_clean_test)
