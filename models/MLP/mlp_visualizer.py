@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from torchvision import datasets, transforms
 import numpy as np
 
-from mlp_autoencoder import MLP_Autoencoder
+from models.MLP.mlp_autoencoder_old import MLP_Autoencoder
 
 def load_checkpoint(path, device='cpu'):
     checkpoint = torch.load(path, map_location=device)
