@@ -82,7 +82,7 @@ def train_model(model, dataloader, epochs=10, lr=1e-3):
                 total_loss += loss.item()
             avg_loss = total_loss / len(dataloader)
             print(f"Epoch {epoch+1}/{epochs}, MSE: {avg_loss:.6f}")
-            f.write(f"Epoch {epoch+1}/{epochs}, Loss: {loss.item():.6f}\n")
+            f.write(f"Epoch {epoch+1}/{epochs}, MSE={loss.item():.6f}\n")
             f.flush()
 
 # ------------------------ Evaluation Metrics ------------------------

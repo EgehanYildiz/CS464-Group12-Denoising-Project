@@ -1,10 +1,10 @@
-Epoch 1/10, Loss: 0.002112
-Epoch 2/10, Loss: 0.001728
-Epoch 3/10, Loss: 0.001541
-Epoch 4/10, Loss: 0.001431
-Epoch 5/10, Loss: 0.001615
-Epoch 6/10, Loss: 0.001599
-Epoch 7/10, Loss: 0.001819
-Epoch 8/10, Loss: 0.001564
-Epoch 9/10, Loss: 0.001480
-Epoch 10/10, Loss: 0.001523
+Epoch 1/10, MSE=0.002112
+Epoch 2/10, MSE=0.001728
+Epoch 3/10, MSE=0.001541
+Epoch 4/10, MSE=0.001431
+Epoch 5/10, MSE=0.001615
+Epoch 6/10, MSE=0.001599
+Epoch 7/10, MSE=0.001819
+Epoch 8/10, MSE=0.001564
+Epoch 9/10, MSE=0.001480
+Epoch 10/10, MSE=0.001523
