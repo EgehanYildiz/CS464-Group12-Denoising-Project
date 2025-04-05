@@ -1,19 +1,19 @@
 MLP Autoencoder Evaluation Results
 =====================================
 
-Test Loss: 0.011952
+Test Loss: 0.012318
 
 Mean Squared Error (MSE):
-  Noisy images: 0.009287
-  Denoised images: 0.011952
-  Improvement: -28.70%
+  Noisy images: 0.009270
+  Denoised images: 0.012318
+  Improvement: -32.89%
 
 Peak Signal-to-Noise Ratio (PSNR):
   Noisy images: 20.34 dB
-  Denoised images: 19.75 dB
-  Improvement: -0.58 dB
+  Denoised images: 19.64 dB
+  Improvement: -0.71 dB
 
 Structural Similarity Index (SSIM):
-  Noisy images: 0.4614
-  Denoised images: 0.4455
-  Improvement: -1.59%
+  Noisy images: 0.4615
+  Denoised images: 0.4405
+  Improvement: -2.10%
