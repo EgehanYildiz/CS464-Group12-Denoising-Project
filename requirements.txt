@@ -7,6 +7,7 @@ scikit-image
 jupyter
 pandas
 seaborn
+tqdm
 tensorflow-macos; platform_system == "Darwin"
 tensorflow-metal; platform_system == "Darwin"
 tensorflow; platform_system != "Darwin"
