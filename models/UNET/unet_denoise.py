@@ -28,25 +28,22 @@ class UNet(nn.Module):
             )
 
         self.enc1 = conv_block(in_channels, 32)   # 32x32 → 32 channels
-        self.pool1 = nn.MaxPool2d(2)              # → 16x16
-        self.enc2 = conv_block(32, 64)
-        self.pool2 = nn.MaxPool2d(2)              # → 8x8
+        self.pool = nn.MaxPool2d(2)               # → 16x16
+        self.enc2 = conv_block(32, 64)            
 
-        self.bottleneck = conv_block(64, 128)
+        self.bottleneck = conv_block(64, 128)     
 
-        self.up2 = up_block(128, 64)              # 8x8 → 16x16
-        self.dec2 = conv_block(128, 64)
-        self.up1 = up_block(64, 32)               # 16x16 → 32x32
-        self.dec1 = conv_block(64, 32)
+        self.up1 = up_block(128, 64)              # 16x16 → 32x32
+        self.dec1 = conv_block(96, 64)
+           
 
-        self.final = nn.Conv2d(32, out_channels, kernel_size=1)
+        self.final = nn.Conv2d(64, out_channels, kernel_size=1)
 
     def forward(self, x):
-        e1 = self.enc1(x)
-        e2 = self.enc2(self.pool1(e1))
-        b = self.bottleneck(self.pool2(e2))
-        d2 = self.dec2(torch.cat([self.up2(b), e2], dim=1))
-        d1 = self.dec1(torch.cat([self.up1(d2), e1], dim=1))
+        e1 = self.enc1(x)                     
+        e2 = self.enc2(self.pool(e1))        
+        b = self.bottleneck(e2)              
+        d1 = self.dec1(torch.cat([self.up1(b), e1], dim=1))  
         return self.final(d1)
 
 
@@ -65,7 +62,7 @@ def load_test_samples(path):
     return x_noisy, x_clean
 
 # ------------------------ Training & Evaluation ------------------------
-def train_model(model, dataloader, epochs=10, lr=1e-3):
+def train_model(model, dataloader, epochs=30, lr=1e-3):
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = nn.MSELoss()
     model.train()
@@ -86,23 +83,37 @@ def train_model(model, dataloader, epochs=10, lr=1e-3):
             f.flush()
 
 # ------------------------ Evaluation Metrics ------------------------
-def evaluate_model(model, x_noisy, x_clean, num_samples=10):
+def evaluate_model(model, x_noisy, x_clean, num_samples=30, log_path="models/UNET/results.txt"):
     model.eval()
     with torch.no_grad():
         output = model(x_noisy[:num_samples])
+
     denoised = output.clamp(0, 1).cpu().numpy()
     clean = x_clean[:num_samples].cpu().numpy()
     noisy = x_noisy[:num_samples].cpu().numpy()
 
-    avg_psnr = np.mean([psnr(clean[i].transpose(1, 2, 0), denoised[i].transpose(1, 2, 0)) for i in range(num_samples)])
-    avg_ssim = np.mean([
-    ssim(clean[i].transpose(1, 2, 0), denoised[i].transpose(1, 2, 0), win_size=7, channel_axis=-1, data_range=1.0)
-            for i in range(num_samples)
-        ])
+    psnr_vals = [
+        psnr(clean[i].transpose(1, 2, 0), denoised[i].transpose(1, 2, 0))
+        for i in range(num_samples)
+    ]
+    ssim_vals = [
+        ssim(clean[i].transpose(1, 2, 0), denoised[i].transpose(1, 2, 0), win_size=7, channel_axis=-1, data_range=1.0)
+        for i in range(num_samples)
+    ]
+    mse_vals = [
+        np.mean((clean[i] - denoised[i]) ** 2)
+        for i in range(num_samples)
+    ]
 
+    avg_psnr = np.mean(psnr_vals)
+    avg_ssim = np.mean(ssim_vals)
+    avg_mse = np.mean(mse_vals)
 
-    print(f"Average PSNR: {avg_psnr:.2f} dB")
-    print(f"Average SSIM: {avg_ssim:.4f}")
+    with open(log_path, "a") as f:
+        f.write("\nEvaluation Results:\n")
+        f.write(f"PSNR: {avg_psnr:.2f} dB\n")
+        f.write(f"SSIM: {avg_ssim:.4f}\n")
+        f.write(f"MSE: {avg_mse:.6f}\n")
 
     # Save comparison image
     fig, axes = plt.subplots(num_samples, 3, figsize=(9, num_samples * 2))
@@ -121,5 +132,5 @@ if __name__ == "__main__":
     x_noisy_test, x_clean_test = load_test_samples("cifar10_data/cifar10_test_noisy.npz")
 
     model = UNet()
-    train_model(model, train_loader, epochs=10)
+    train_model(model, train_loader, epochs=30)
     evaluate_model(model, x_noisy_test, x_clean_test)
