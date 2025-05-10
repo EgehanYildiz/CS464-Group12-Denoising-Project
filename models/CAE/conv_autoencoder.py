@@ -362,7 +362,7 @@ def main():
     save_dir = 'models/CAE'
     batch_size = 256  # Increased batch size for faster training
     learning_rate = 0.001
-    num_epochs = 30  # Reduced number of epochs
+    num_epochs = 50  # Reduced number of epochs
     
     # Create directories
     os.makedirs(save_dir, exist_ok=True)
