@@ -94,7 +94,7 @@ Each model resides in its own subdirectory under `models/`. Navigate to the resp
 
 - **Convolutional Autoencoder:**
   ```bash
-  cd models/conv_autoencoder
+  cd models/CAE
   python conv_autoencoder.py
   ```
 

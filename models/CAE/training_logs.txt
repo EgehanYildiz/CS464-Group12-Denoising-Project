@@ -433,3 +433,435 @@ ConvAutoencoder(
 2025-04-04 19:37:42,788 - INFO - Evaluating model...
 2025-04-04 19:38:00,058 - INFO - Evaluation results - MSE: 0.004973, PSNR: 23.48 dB, SSIM: 0.6382
 2025-04-04 19:38:01,052 - INFO - Training and evaluation completed successfully!
+2025-05-10 19:36:55,160 - INFO - Using device: cpu
+2025-05-10 19:36:55,160 - INFO - Starting convolutional autoencoder training script
+2025-05-10 19:36:55,160 - INFO - Configuration: batch_size=128, learning_rate=0.001, num_epochs=50
+2025-05-10 19:36:55,160 - INFO - Loading data...
+2025-05-10 19:36:59,571 - INFO - Loaded data shapes: Train: torch.Size([50000, 3, 32, 32]), Test: torch.Size([10000, 3, 32, 32])
+2025-05-10 19:36:59,571 - INFO - Creating dataloaders...
+2025-05-10 19:36:59,661 - INFO - Created dataloaders - Training: 45000 samples, Validation: 5000 samples, Test: 10000 samples
+2025-05-10 19:36:59,661 - INFO - Initializing model...
+2025-05-10 19:37:04,299 - INFO - Model architecture:
+ConvAutoencoder(
+  (encoder): Sequential(
+    (0): Conv2d(3, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU(inplace=True)
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): ReLU(inplace=True)
+    (5): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): ReLU(inplace=True)
+    (8): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (decoder): Sequential(
+    (0): ConvTranspose2d(128, 64, kernel_size=(2, 2), stride=(2, 2))
+    (1): ReLU(inplace=True)
+    (2): ConvTranspose2d(64, 32, kernel_size=(2, 2), stride=(2, 2))
+    (3): ReLU(inplace=True)
+    (4): ConvTranspose2d(32, 3, kernel_size=(2, 2), stride=(2, 2))
+    (5): Sigmoid()
+  )
+)
+2025-05-10 19:37:04,299 - INFO - Starting model training...
+2025-05-10 19:37:04,299 - INFO - Starting training for 50 epochs
+2025-05-10 19:37:13,417 - INFO - Epoch [1/50], Batch [100/352], Loss: 0.021124
+2025-05-10 19:37:22,560 - INFO - Epoch [1/50], Batch [200/352], Loss: 0.015853
+2025-05-10 19:37:32,081 - INFO - Epoch [1/50], Batch [300/352], Loss: 0.013196
+2025-05-10 19:37:37,852 - INFO - Epoch [1/50], Train Loss: 0.020913, Val Loss: 0.012448, Time: 33.55s
+2025-05-10 19:37:37,859 - INFO - Saved best model at epoch 1 with validation loss: 0.012448
+2025-05-10 19:37:47,557 - INFO - Epoch [2/50], Batch [100/352], Loss: 0.011666
+2025-05-10 19:37:56,267 - INFO - Epoch [2/50], Batch [200/352], Loss: 0.010938
+2025-05-10 19:38:04,934 - INFO - Epoch [2/50], Batch [300/352], Loss: 0.010731
+2025-05-10 19:38:10,399 - INFO - Epoch [2/50], Train Loss: 0.011387, Val Loss: 0.010475, Time: 32.54s
+2025-05-10 19:38:10,401 - INFO - Saved best model at epoch 2 with validation loss: 0.010475
+2025-05-10 19:38:19,017 - INFO - Epoch [3/50], Batch [100/352], Loss: 0.009782
+2025-05-10 19:38:27,559 - INFO - Epoch [3/50], Batch [200/352], Loss: 0.010067
+2025-05-10 19:38:36,160 - INFO - Epoch [3/50], Batch [300/352], Loss: 0.010118
+2025-05-10 19:38:41,650 - INFO - Epoch [3/50], Train Loss: 0.009963, Val Loss: 0.009435, Time: 31.25s
+2025-05-10 19:38:41,651 - INFO - Saved best model at epoch 3 with validation loss: 0.009435
+2025-05-10 19:38:50,231 - INFO - Epoch [4/50], Batch [100/352], Loss: 0.009577
+2025-05-10 19:38:58,852 - INFO - Epoch [4/50], Batch [200/352], Loss: 0.008795
+2025-05-10 19:39:07,397 - INFO - Epoch [4/50], Batch [300/352], Loss: 0.008959
+2025-05-10 19:39:12,920 - INFO - Epoch [4/50], Train Loss: 0.008876, Val Loss: 0.008455, Time: 31.27s
+2025-05-10 19:39:12,921 - INFO - Saved best model at epoch 4 with validation loss: 0.008455
+2025-05-10 19:39:21,508 - INFO - Epoch [5/50], Batch [100/352], Loss: 0.008229
+2025-05-10 19:39:30,785 - INFO - Epoch [5/50], Batch [200/352], Loss: 0.007987
+2025-05-10 19:39:39,445 - INFO - Epoch [5/50], Batch [300/352], Loss: 0.008258
+2025-05-10 19:39:44,888 - INFO - Epoch [5/50], Train Loss: 0.008208, Val Loss: 0.007911, Time: 31.97s
+2025-05-10 19:39:44,890 - INFO - Saved best model at epoch 5 with validation loss: 0.007911
+2025-05-10 19:39:53,446 - INFO - Epoch [6/50], Batch [100/352], Loss: 0.007956
+2025-05-10 19:40:02,040 - INFO - Epoch [6/50], Batch [200/352], Loss: 0.007284
+2025-05-10 19:40:10,561 - INFO - Epoch [6/50], Batch [300/352], Loss: 0.007355
+2025-05-10 19:40:16,005 - INFO - Epoch [6/50], Train Loss: 0.007813, Val Loss: 0.007640, Time: 31.12s
+2025-05-10 19:40:16,006 - INFO - Saved best model at epoch 6 with validation loss: 0.007640
+2025-05-10 19:40:24,540 - INFO - Epoch [7/50], Batch [100/352], Loss: 0.007881
+2025-05-10 19:40:33,802 - INFO - Epoch [7/50], Batch [200/352], Loss: 0.007280
+2025-05-10 19:40:42,680 - INFO - Epoch [7/50], Batch [300/352], Loss: 0.007557
+2025-05-10 19:40:48,273 - INFO - Epoch [7/50], Train Loss: 0.007494, Val Loss: 0.007461, Time: 32.27s
+2025-05-10 19:40:48,275 - INFO - Saved best model at epoch 7 with validation loss: 0.007461
+2025-05-10 19:40:56,881 - INFO - Epoch [8/50], Batch [100/352], Loss: 0.007301
+2025-05-10 19:41:05,443 - INFO - Epoch [8/50], Batch [200/352], Loss: 0.007170
+2025-05-10 19:41:14,017 - INFO - Epoch [8/50], Batch [300/352], Loss: 0.007777
+2025-05-10 19:41:19,527 - INFO - Epoch [8/50], Train Loss: 0.007266, Val Loss: 0.007192, Time: 31.25s
+2025-05-10 19:41:19,528 - INFO - Saved best model at epoch 8 with validation loss: 0.007192
+2025-05-10 19:41:28,139 - INFO - Epoch [9/50], Batch [100/352], Loss: 0.006866
+2025-05-10 19:41:36,767 - INFO - Epoch [9/50], Batch [200/352], Loss: 0.007130
+2025-05-10 19:41:45,396 - INFO - Epoch [9/50], Batch [300/352], Loss: 0.006940
+2025-05-10 19:41:50,877 - INFO - Epoch [9/50], Train Loss: 0.007077, Val Loss: 0.007011, Time: 31.35s
+2025-05-10 19:41:50,879 - INFO - Saved best model at epoch 9 with validation loss: 0.007011
+2025-05-10 19:41:59,504 - INFO - Epoch [10/50], Batch [100/352], Loss: 0.006786
+2025-05-10 19:42:08,102 - INFO - Epoch [10/50], Batch [200/352], Loss: 0.006724
+2025-05-10 19:42:16,993 - INFO - Epoch [10/50], Batch [300/352], Loss: 0.007362
+2025-05-10 19:42:22,433 - INFO - Epoch [10/50], Train Loss: 0.006889, Val Loss: 0.006879, Time: 31.55s
+2025-05-10 19:42:22,434 - INFO - Saved best model at epoch 10 with validation loss: 0.006879
+2025-05-10 19:42:31,008 - INFO - Epoch [11/50], Batch [100/352], Loss: 0.006795
+2025-05-10 19:42:39,560 - INFO - Epoch [11/50], Batch [200/352], Loss: 0.006401
+2025-05-10 19:42:48,116 - INFO - Epoch [11/50], Batch [300/352], Loss: 0.006454
+2025-05-10 19:42:53,549 - INFO - Epoch [11/50], Train Loss: 0.006738, Val Loss: 0.006694, Time: 31.11s
+2025-05-10 19:42:53,550 - INFO - Saved best model at epoch 11 with validation loss: 0.006694
+2025-05-10 19:43:02,144 - INFO - Epoch [12/50], Batch [100/352], Loss: 0.006580
+2025-05-10 19:43:10,688 - INFO - Epoch [12/50], Batch [200/352], Loss: 0.006886
+2025-05-10 19:43:19,259 - INFO - Epoch [12/50], Batch [300/352], Loss: 0.006584
+2025-05-10 19:43:24,702 - INFO - Epoch [12/50], Train Loss: 0.006631, Val Loss: 0.006520, Time: 31.15s
+2025-05-10 19:43:24,704 - INFO - Saved best model at epoch 12 with validation loss: 0.006520
+2025-05-10 19:43:33,282 - INFO - Epoch [13/50], Batch [100/352], Loss: 0.006144
+2025-05-10 19:43:41,929 - INFO - Epoch [13/50], Batch [200/352], Loss: 0.006474
+2025-05-10 19:43:50,474 - INFO - Epoch [13/50], Batch [300/352], Loss: 0.006268
+2025-05-10 19:43:55,932 - INFO - Epoch [13/50], Train Loss: 0.006509, Val Loss: 0.006482, Time: 31.23s
+2025-05-10 19:43:55,933 - INFO - Saved best model at epoch 13 with validation loss: 0.006482
+2025-05-10 19:44:04,409 - INFO - Epoch [14/50], Batch [100/352], Loss: 0.006445
+2025-05-10 19:44:13,223 - INFO - Epoch [14/50], Batch [200/352], Loss: 0.006568
+2025-05-10 19:44:22,167 - INFO - Epoch [14/50], Batch [300/352], Loss: 0.006131
+2025-05-10 19:44:28,032 - INFO - Epoch [14/50], Train Loss: 0.006391, Val Loss: 0.006421, Time: 32.10s
+2025-05-10 19:44:28,033 - INFO - Saved best model at epoch 14 with validation loss: 0.006421
+2025-05-10 19:44:37,155 - INFO - Epoch [15/50], Batch [100/352], Loss: 0.006252
+2025-05-10 19:44:46,252 - INFO - Epoch [15/50], Batch [200/352], Loss: 0.006476
+2025-05-10 19:44:55,317 - INFO - Epoch [15/50], Batch [300/352], Loss: 0.006281
+2025-05-10 19:45:01,206 - INFO - Epoch [15/50], Train Loss: 0.006307, Val Loss: 0.006524, Time: 33.17s
+2025-05-10 19:45:10,286 - INFO - Epoch [16/50], Batch [100/352], Loss: 0.006478
+2025-05-10 19:45:19,317 - INFO - Epoch [16/50], Batch [200/352], Loss: 0.006164
+2025-05-10 19:45:29,037 - INFO - Epoch [16/50], Batch [300/352], Loss: 0.006225
+2025-05-10 19:45:35,606 - INFO - Epoch [16/50], Train Loss: 0.006208, Val Loss: 0.006253, Time: 34.40s
+2025-05-10 19:45:35,608 - INFO - Saved best model at epoch 16 with validation loss: 0.006253
+2025-05-10 19:45:45,862 - INFO - Epoch [17/50], Batch [100/352], Loss: 0.006460
+2025-05-10 19:45:55,940 - INFO - Epoch [17/50], Batch [200/352], Loss: 0.006175
+2025-05-10 19:46:05,611 - INFO - Epoch [17/50], Batch [300/352], Loss: 0.006213
+2025-05-10 19:46:11,976 - INFO - Epoch [17/50], Train Loss: 0.006131, Val Loss: 0.006125, Time: 36.37s
+2025-05-10 19:46:11,977 - INFO - Saved best model at epoch 17 with validation loss: 0.006125
+2025-05-10 19:46:21,717 - INFO - Epoch [18/50], Batch [100/352], Loss: 0.006079
+2025-05-10 19:46:31,742 - INFO - Epoch [18/50], Batch [200/352], Loss: 0.006424
+2025-05-10 19:46:42,011 - INFO - Epoch [18/50], Batch [300/352], Loss: 0.005925
+2025-05-10 19:46:48,601 - INFO - Epoch [18/50], Train Loss: 0.006048, Val Loss: 0.006036, Time: 36.62s
+2025-05-10 19:46:48,604 - INFO - Saved best model at epoch 18 with validation loss: 0.006036
+2025-05-10 19:46:58,497 - INFO - Epoch [19/50], Batch [100/352], Loss: 0.005891
+2025-05-10 19:47:08,865 - INFO - Epoch [19/50], Batch [200/352], Loss: 0.006100
+2025-05-10 19:47:18,510 - INFO - Epoch [19/50], Batch [300/352], Loss: 0.006682
+2025-05-10 19:47:24,873 - INFO - Epoch [19/50], Train Loss: 0.005984, Val Loss: 0.006116, Time: 36.27s
+2025-05-10 19:47:34,873 - INFO - Epoch [20/50], Batch [100/352], Loss: 0.005962
+2025-05-10 19:47:44,433 - INFO - Epoch [20/50], Batch [200/352], Loss: 0.006333
+2025-05-10 19:47:53,522 - INFO - Epoch [20/50], Batch [300/352], Loss: 0.006251
+2025-05-10 19:47:59,450 - INFO - Epoch [20/50], Train Loss: 0.005922, Val Loss: 0.005843, Time: 34.58s
+2025-05-10 19:47:59,451 - INFO - Saved best model at epoch 20 with validation loss: 0.005843
+2025-05-10 19:48:08,568 - INFO - Epoch [21/50], Batch [100/352], Loss: 0.006014
+2025-05-10 19:48:17,576 - INFO - Epoch [21/50], Batch [200/352], Loss: 0.005786
+2025-05-10 19:48:26,558 - INFO - Epoch [21/50], Batch [300/352], Loss: 0.006072
+2025-05-10 19:48:32,406 - INFO - Epoch [21/50], Train Loss: 0.005859, Val Loss: 0.005930, Time: 32.95s
+2025-05-10 19:48:41,513 - INFO - Epoch [22/50], Batch [100/352], Loss: 0.005575
+2025-05-10 19:48:50,551 - INFO - Epoch [22/50], Batch [200/352], Loss: 0.005582
+2025-05-10 19:48:59,561 - INFO - Epoch [22/50], Batch [300/352], Loss: 0.006086
+2025-05-10 19:49:05,371 - INFO - Epoch [22/50], Train Loss: 0.005817, Val Loss: 0.005773, Time: 32.96s
+2025-05-10 19:49:05,373 - INFO - Saved best model at epoch 22 with validation loss: 0.005773
+2025-05-10 19:49:14,590 - INFO - Epoch [23/50], Batch [100/352], Loss: 0.005429
+2025-05-10 19:49:24,154 - INFO - Epoch [23/50], Batch [200/352], Loss: 0.005527
+2025-05-10 19:49:33,191 - INFO - Epoch [23/50], Batch [300/352], Loss: 0.005499
+2025-05-10 19:49:39,168 - INFO - Epoch [23/50], Train Loss: 0.005763, Val Loss: 0.005777, Time: 33.79s
+2025-05-10 19:49:48,262 - INFO - Epoch [24/50], Batch [100/352], Loss: 0.005454
+2025-05-10 19:49:57,310 - INFO - Epoch [24/50], Batch [200/352], Loss: 0.005469
+2025-05-10 19:50:06,328 - INFO - Epoch [24/50], Batch [300/352], Loss: 0.005739
+2025-05-10 19:50:12,208 - INFO - Epoch [24/50], Train Loss: 0.005718, Val Loss: 0.005814, Time: 33.04s
+2025-05-10 19:50:21,287 - INFO - Epoch [25/50], Batch [100/352], Loss: 0.005906
+2025-05-10 19:50:30,337 - INFO - Epoch [25/50], Batch [200/352], Loss: 0.005737
+2025-05-10 19:50:39,410 - INFO - Epoch [25/50], Batch [300/352], Loss: 0.005676
+2025-05-10 19:50:45,302 - INFO - Epoch [25/50], Train Loss: 0.005669, Val Loss: 0.005714, Time: 33.09s
+2025-05-10 19:50:45,304 - INFO - Saved best model at epoch 25 with validation loss: 0.005714
+2025-05-10 19:50:54,386 - INFO - Epoch [26/50], Batch [100/352], Loss: 0.005616
+2025-05-10 19:51:03,408 - INFO - Epoch [26/50], Batch [200/352], Loss: 0.005436
+2025-05-10 19:51:12,477 - INFO - Epoch [26/50], Batch [300/352], Loss: 0.005436
+2025-05-10 19:51:18,354 - INFO - Epoch [26/50], Train Loss: 0.005630, Val Loss: 0.005610, Time: 33.05s
+2025-05-10 19:51:18,356 - INFO - Saved best model at epoch 26 with validation loss: 0.005610
+2025-05-10 19:51:27,464 - INFO - Epoch [27/50], Batch [100/352], Loss: 0.005477
+2025-05-10 19:51:36,530 - INFO - Epoch [27/50], Batch [200/352], Loss: 0.005444
+2025-05-10 19:51:45,644 - INFO - Epoch [27/50], Batch [300/352], Loss: 0.005607
+2025-05-10 19:51:51,567 - INFO - Epoch [27/50], Train Loss: 0.005591, Val Loss: 0.005628, Time: 33.21s
+2025-05-10 19:52:00,707 - INFO - Epoch [28/50], Batch [100/352], Loss: 0.005520
+2025-05-10 19:52:09,760 - INFO - Epoch [28/50], Batch [200/352], Loss: 0.005448
+2025-05-10 19:52:18,842 - INFO - Epoch [28/50], Batch [300/352], Loss: 0.005866
+2025-05-10 19:52:24,730 - INFO - Epoch [28/50], Train Loss: 0.005551, Val Loss: 0.005552, Time: 33.16s
+2025-05-10 19:52:24,732 - INFO - Saved best model at epoch 28 with validation loss: 0.005552
+2025-05-10 19:52:34,093 - INFO - Epoch [29/50], Batch [100/352], Loss: 0.005589
+2025-05-10 19:53:09,528 - INFO - Epoch [29/50], Batch [200/352], Loss: 0.005294
+2025-05-10 19:53:18,268 - INFO - Epoch [29/50], Batch [300/352], Loss: 0.005626
+2025-05-10 19:53:23,724 - INFO - Epoch [29/50], Train Loss: 0.005519, Val Loss: 0.005570, Time: 58.99s
+2025-05-10 19:53:32,301 - INFO - Epoch [30/50], Batch [100/352], Loss: 0.005726
+2025-05-10 19:53:40,858 - INFO - Epoch [30/50], Batch [200/352], Loss: 0.005310
+2025-05-10 19:53:49,420 - INFO - Epoch [30/50], Batch [300/352], Loss: 0.005797
+2025-05-10 19:53:54,895 - INFO - Epoch [30/50], Train Loss: 0.005480, Val Loss: 0.005572, Time: 31.17s
+2025-05-10 19:54:03,560 - INFO - Epoch [31/50], Batch [100/352], Loss: 0.005401
+2025-05-10 19:54:12,239 - INFO - Epoch [31/50], Batch [200/352], Loss: 0.005180
+2025-05-10 19:54:20,798 - INFO - Epoch [31/50], Batch [300/352], Loss: 0.005713
+2025-05-10 19:54:26,264 - INFO - Epoch [31/50], Train Loss: 0.005467, Val Loss: 0.005531, Time: 31.37s
+2025-05-10 19:54:26,266 - INFO - Saved best model at epoch 31 with validation loss: 0.005531
+2025-05-10 19:54:34,852 - INFO - Epoch [32/50], Batch [100/352], Loss: 0.005050
+2025-05-10 19:54:43,434 - INFO - Epoch [32/50], Batch [200/352], Loss: 0.005510
+2025-05-10 19:54:51,938 - INFO - Epoch [32/50], Batch [300/352], Loss: 0.005182
+2025-05-10 19:54:57,526 - INFO - Epoch [32/50], Train Loss: 0.005411, Val Loss: 0.005569, Time: 31.26s
+2025-05-10 19:55:06,316 - INFO - Epoch [33/50], Batch [100/352], Loss: 0.005443
+2025-05-10 19:55:15,323 - INFO - Epoch [33/50], Batch [200/352], Loss: 0.005450
+2025-05-10 19:55:24,566 - INFO - Epoch [33/50], Batch [300/352], Loss: 0.005533
+2025-05-10 19:55:30,648 - INFO - Epoch [33/50], Train Loss: 0.005394, Val Loss: 0.005431, Time: 33.12s
+2025-05-10 19:55:30,649 - INFO - Saved best model at epoch 33 with validation loss: 0.005431
+2025-05-10 19:55:40,155 - INFO - Epoch [34/50], Batch [100/352], Loss: 0.005253
+2025-05-10 19:55:49,752 - INFO - Epoch [34/50], Batch [200/352], Loss: 0.005202
+2025-05-10 19:55:59,410 - INFO - Epoch [34/50], Batch [300/352], Loss: 0.005366
+2025-05-10 19:56:05,717 - INFO - Epoch [34/50], Train Loss: 0.005363, Val Loss: 0.005460, Time: 35.07s
+2025-05-10 19:56:15,985 - INFO - Epoch [35/50], Batch [100/352], Loss: 0.005145
+2025-05-10 19:56:25,752 - INFO - Epoch [35/50], Batch [200/352], Loss: 0.005223
+2025-05-10 19:56:35,479 - INFO - Epoch [35/50], Batch [300/352], Loss: 0.005408
+2025-05-10 19:56:41,761 - INFO - Epoch [35/50], Train Loss: 0.005339, Val Loss: 0.005325, Time: 36.04s
+2025-05-10 19:56:41,763 - INFO - Saved best model at epoch 35 with validation loss: 0.005325
+2025-05-10 19:56:51,410 - INFO - Epoch [36/50], Batch [100/352], Loss: 0.005226
+2025-05-10 19:57:00,935 - INFO - Epoch [36/50], Batch [200/352], Loss: 0.005633
+2025-05-10 19:57:10,413 - INFO - Epoch [36/50], Batch [300/352], Loss: 0.005307
+2025-05-10 19:57:16,566 - INFO - Epoch [36/50], Train Loss: 0.005305, Val Loss: 0.005310, Time: 34.80s
+2025-05-10 19:57:16,567 - INFO - Saved best model at epoch 36 with validation loss: 0.005310
+2025-05-10 19:57:26,098 - INFO - Epoch [37/50], Batch [100/352], Loss: 0.005427
+2025-05-10 19:57:35,448 - INFO - Epoch [37/50], Batch [200/352], Loss: 0.005572
+2025-05-10 19:57:44,784 - INFO - Epoch [37/50], Batch [300/352], Loss: 0.005243
+2025-05-10 19:57:50,822 - INFO - Epoch [37/50], Train Loss: 0.005284, Val Loss: 0.005338, Time: 34.25s
+2025-05-10 19:58:00,212 - INFO - Epoch [38/50], Batch [100/352], Loss: 0.005611
+2025-05-10 19:58:09,538 - INFO - Epoch [38/50], Batch [200/352], Loss: 0.005292
+2025-05-10 19:58:18,847 - INFO - Epoch [38/50], Batch [300/352], Loss: 0.004870
+2025-05-10 19:58:24,913 - INFO - Epoch [38/50], Train Loss: 0.005266, Val Loss: 0.005276, Time: 34.09s
+2025-05-10 19:58:24,915 - INFO - Saved best model at epoch 38 with validation loss: 0.005276
+2025-05-10 19:58:34,244 - INFO - Epoch [39/50], Batch [100/352], Loss: 0.004992
+2025-05-10 19:58:43,495 - INFO - Epoch [39/50], Batch [200/352], Loss: 0.005082
+2025-05-10 19:58:52,733 - INFO - Epoch [39/50], Batch [300/352], Loss: 0.005103
+2025-05-10 19:58:58,773 - INFO - Epoch [39/50], Train Loss: 0.005228, Val Loss: 0.005275, Time: 33.86s
+2025-05-10 19:58:58,774 - INFO - Saved best model at epoch 39 with validation loss: 0.005275
+2025-05-10 19:59:08,206 - INFO - Epoch [40/50], Batch [100/352], Loss: 0.005019
+2025-05-10 19:59:18,352 - INFO - Epoch [40/50], Batch [200/352], Loss: 0.004984
+2025-05-10 19:59:28,773 - INFO - Epoch [40/50], Batch [300/352], Loss: 0.005356
+2025-05-10 19:59:38,855 - INFO - Epoch [40/50], Train Loss: 0.005218, Val Loss: 0.005358, Time: 40.08s
+2025-05-10 19:59:52,409 - INFO - Epoch [41/50], Batch [100/352], Loss: 0.005238
+2025-05-10 20:00:03,918 - INFO - Epoch [41/50], Batch [200/352], Loss: 0.005252
+2025-05-10 20:00:14,973 - INFO - Epoch [41/50], Batch [300/352], Loss: 0.005212
+2025-05-10 20:00:22,170 - INFO - Epoch [41/50], Train Loss: 0.005197, Val Loss: 0.005275, Time: 43.31s
+2025-05-10 20:00:32,972 - INFO - Epoch [42/50], Batch [100/352], Loss: 0.005233
+2025-05-10 20:00:42,737 - INFO - Epoch [42/50], Batch [200/352], Loss: 0.005063
+2025-05-10 20:00:52,435 - INFO - Epoch [42/50], Batch [300/352], Loss: 0.005148
+2025-05-10 20:00:59,272 - INFO - Epoch [42/50], Train Loss: 0.005177, Val Loss: 0.005223, Time: 37.10s
+2025-05-10 20:00:59,274 - INFO - Saved best model at epoch 42 with validation loss: 0.005223
+2025-05-10 20:01:08,992 - INFO - Epoch [43/50], Batch [100/352], Loss: 0.005774
+2025-05-10 20:01:18,501 - INFO - Epoch [43/50], Batch [200/352], Loss: 0.004984
+2025-05-10 20:01:27,967 - INFO - Epoch [43/50], Batch [300/352], Loss: 0.004846
+2025-05-10 20:01:34,079 - INFO - Epoch [43/50], Train Loss: 0.005145, Val Loss: 0.005133, Time: 34.81s
+2025-05-10 20:01:34,081 - INFO - Saved best model at epoch 43 with validation loss: 0.005133
+2025-05-10 20:01:43,540 - INFO - Epoch [44/50], Batch [100/352], Loss: 0.005074
+2025-05-10 20:01:52,890 - INFO - Epoch [44/50], Batch [200/352], Loss: 0.005115
+2025-05-10 20:02:02,353 - INFO - Epoch [44/50], Batch [300/352], Loss: 0.004895
+2025-05-10 20:02:08,414 - INFO - Epoch [44/50], Train Loss: 0.005141, Val Loss: 0.005216, Time: 34.33s
+2025-05-10 20:02:17,805 - INFO - Epoch [45/50], Batch [100/352], Loss: 0.005079
+2025-05-10 20:02:27,128 - INFO - Epoch [45/50], Batch [200/352], Loss: 0.005265
+2025-05-10 20:02:36,391 - INFO - Epoch [45/50], Batch [300/352], Loss: 0.005115
+2025-05-10 20:02:42,407 - INFO - Epoch [45/50], Train Loss: 0.005110, Val Loss: 0.005162, Time: 33.99s
+2025-05-10 20:02:51,719 - INFO - Epoch [46/50], Batch [100/352], Loss: 0.005191
+2025-05-10 20:03:01,019 - INFO - Epoch [46/50], Batch [200/352], Loss: 0.005110
+2025-05-10 20:03:10,300 - INFO - Epoch [46/50], Batch [300/352], Loss: 0.004857
+2025-05-10 20:03:16,691 - INFO - Epoch [46/50], Train Loss: 0.005110, Val Loss: 0.005101, Time: 34.28s
+2025-05-10 20:03:16,692 - INFO - Saved best model at epoch 46 with validation loss: 0.005101
+2025-05-10 20:03:26,955 - INFO - Epoch [47/50], Batch [100/352], Loss: 0.005292
+2025-05-10 20:03:36,432 - INFO - Epoch [47/50], Batch [200/352], Loss: 0.004800
+2025-05-10 20:03:45,877 - INFO - Epoch [47/50], Batch [300/352], Loss: 0.005447
+2025-05-10 20:03:52,001 - INFO - Epoch [47/50], Train Loss: 0.005077, Val Loss: 0.005178, Time: 35.31s
+2025-05-10 20:04:01,519 - INFO - Epoch [48/50], Batch [100/352], Loss: 0.005145
+2025-05-10 20:04:10,990 - INFO - Epoch [48/50], Batch [200/352], Loss: 0.005330
+2025-05-10 20:04:20,428 - INFO - Epoch [48/50], Batch [300/352], Loss: 0.004826
+2025-05-10 20:04:26,592 - INFO - Epoch [48/50], Train Loss: 0.005071, Val Loss: 0.005110, Time: 34.59s
+2025-05-10 20:04:36,047 - INFO - Epoch [49/50], Batch [100/352], Loss: 0.005096
+2025-05-10 20:04:45,572 - INFO - Epoch [49/50], Batch [200/352], Loss: 0.005158
+2025-05-10 20:04:54,964 - INFO - Epoch [49/50], Batch [300/352], Loss: 0.005121
+2025-05-10 20:05:01,057 - INFO - Epoch [49/50], Train Loss: 0.005043, Val Loss: 0.005106, Time: 34.46s
+2025-05-10 20:05:10,508 - INFO - Epoch [50/50], Batch [100/352], Loss: 0.005023
+2025-05-10 20:05:19,901 - INFO - Epoch [50/50], Batch [200/352], Loss: 0.004691
+2025-05-10 20:05:29,295 - INFO - Epoch [50/50], Batch [300/352], Loss: 0.005143
+2025-05-10 20:05:35,399 - INFO - Epoch [50/50], Train Loss: 0.005038, Val Loss: 0.005181, Time: 34.34s
+2025-05-10 20:05:36,407 - INFO - Loading best model for evaluation...
+2025-05-10 20:05:36,411 - INFO - Evaluating model...
+2025-05-10 20:05:43,850 - INFO - Evaluation results - MSE: 0.005067, PSNR: 23.41 dB, SSIM: 0.6335
+2025-05-10 20:05:44,537 - INFO - Training and evaluation completed successfully!
+2025-05-10 22:07:27,990 - INFO - Using device: cpu
+2025-05-10 22:07:27,990 - INFO - Starting convolutional autoencoder training script
+2025-05-10 22:07:27,990 - INFO - Configuration: batch_size=128, learning_rate=0.001, num_epochs=50
+2025-05-10 22:07:27,990 - INFO - Loading data...
+2025-05-10 22:07:35,669 - INFO - Loaded data shapes: Train: torch.Size([50000, 3, 32, 32]), Test: torch.Size([10000, 3, 32, 32])
+2025-05-10 22:07:35,669 - INFO - Creating dataloaders...
+2025-05-10 22:07:35,794 - INFO - Created dataloaders - Training: 45000 samples, Validation: 5000 samples, Test: 10000 samples
+2025-05-10 22:07:35,794 - INFO - Initializing model...
+2025-05-10 22:07:37,048 - INFO - Model architecture:
+ConvAutoencoder(
+  (encoder): Sequential(
+    (0): Conv2d(3, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.2, inplace=True)
+    (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): LeakyReLU(negative_slope=0.2, inplace=True)
+    (6): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): LeakyReLU(negative_slope=0.2, inplace=True)
+    (9): Conv2d(64, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (10): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (11): LeakyReLU(negative_slope=0.2, inplace=True)
+    (12): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (13): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (14): LeakyReLU(negative_slope=0.2, inplace=True)
+    (15): Conv2d(128, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (16): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (17): LeakyReLU(negative_slope=0.2, inplace=True)
+  )
+  (decoder): Sequential(
+    (0): ConvTranspose2d(128, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), output_padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.2, inplace=True)
+    (3): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): LeakyReLU(negative_slope=0.2, inplace=True)
+    (6): ConvTranspose2d(64, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), output_padding=(1, 1))
+    (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): LeakyReLU(negative_slope=0.2, inplace=True)
+    (9): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (10): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (11): LeakyReLU(negative_slope=0.2, inplace=True)
+    (12): ConvTranspose2d(32, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), output_padding=(1, 1))
+    (13): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (14): LeakyReLU(negative_slope=0.2, inplace=True)
+    (15): Conv2d(32, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (16): Sigmoid()
+  )
+)
+2025-05-10 22:07:37,048 - INFO - Starting model training...
+2025-05-10 22:07:37,049 - INFO - Starting training for 50 epochs
+2025-05-10 22:08:27,328 - INFO - Epoch [1/50], Batch [100/352], Loss: 0.007853
+2025-05-10 22:09:17,475 - INFO - Epoch [1/50], Batch [200/352], Loss: 0.006784
+2025-05-10 22:10:07,838 - INFO - Epoch [1/50], Batch [300/352], Loss: 0.004685
+2025-05-10 22:10:38,436 - INFO - Epoch [1/50], Train Loss: 0.008026, Val Loss: 0.004901, Time: 181.39s
+2025-05-10 22:10:38,446 - INFO - Saved best model at epoch 1 with validation loss: 0.004901
+2025-05-10 22:13:57,793 - INFO - Epoch [2/50], Batch [100/352], Loss: 0.004183
+2025-05-10 22:14:41,387 - INFO - Epoch [2/50], Batch [200/352], Loss: 0.004900
+2025-05-10 22:15:16,466 - INFO - Epoch [2/50], Batch [300/352], Loss: 0.003452
+2025-05-10 22:15:37,751 - INFO - Epoch [2/50], Train Loss: 0.004013, Val Loss: 0.003975, Time: 299.30s
+2025-05-10 22:15:37,754 - INFO - Saved best model at epoch 2 with validation loss: 0.003975
+2025-05-10 22:16:12,465 - INFO - Epoch [3/50], Batch [100/352], Loss: 0.004270
+2025-05-10 22:16:47,122 - INFO - Epoch [3/50], Batch [200/352], Loss: 0.003243
+2025-05-10 22:17:21,840 - INFO - Epoch [3/50], Batch [300/352], Loss: 0.003244
+2025-05-10 22:17:43,366 - INFO - Epoch [3/50], Train Loss: 0.003535, Val Loss: 0.003691, Time: 125.61s
+2025-05-10 22:17:43,369 - INFO - Saved best model at epoch 3 with validation loss: 0.003691
+2025-05-10 22:28:28,398 - INFO - Epoch [4/50], Batch [100/352], Loss: 0.003181
+2025-05-10 22:30:13,335 - INFO - Using device: cpu
+2025-05-10 22:30:13,335 - INFO - Starting convolutional autoencoder training script
+2025-05-10 22:30:13,335 - INFO - Configuration: batch_size=256, learning_rate=0.001, num_epochs=30
+2025-05-10 22:30:13,335 - INFO - Loading data...
+2025-05-10 22:30:17,767 - INFO - Loaded data shapes: Train: torch.Size([50000, 3, 32, 32]), Test: torch.Size([10000, 3, 32, 32])
+2025-05-10 22:30:17,767 - INFO - Creating dataloaders...
+2025-05-10 22:30:17,848 - INFO - Created dataloaders - Training: 45000 samples, Validation: 5000 samples, Test: 10000 samples
+2025-05-10 22:30:17,849 - INFO - Initializing model...
+2025-05-10 22:30:18,595 - ERROR - An error occurred: ReduceLROnPlateau.__init__() got an unexpected keyword argument 'verbose'
+2025-05-10 22:30:33,893 - INFO - Using device: cpu
+2025-05-10 22:30:33,893 - INFO - Starting convolutional autoencoder training script
+2025-05-10 22:30:33,893 - INFO - Configuration: batch_size=256, learning_rate=0.001, num_epochs=30
+2025-05-10 22:30:33,893 - INFO - Loading data...
+2025-05-10 22:30:38,103 - INFO - Loaded data shapes: Train: torch.Size([50000, 3, 32, 32]), Test: torch.Size([10000, 3, 32, 32])
+2025-05-10 22:30:38,103 - INFO - Creating dataloaders...
+2025-05-10 22:30:38,184 - INFO - Created dataloaders - Training: 45000 samples, Validation: 5000 samples, Test: 10000 samples
+2025-05-10 22:30:38,184 - INFO - Initializing model...
+2025-05-10 22:30:38,735 - ERROR - An error occurred: ReduceLROnPlateau.__init__() got an unexpected keyword argument 'verbose'
+2025-05-10 22:31:06,603 - INFO - Using device: cpu
+2025-05-10 22:31:06,603 - INFO - Starting convolutional autoencoder training script
+2025-05-10 22:31:06,603 - INFO - Configuration: batch_size=256, learning_rate=0.001, num_epochs=30
+2025-05-10 22:31:06,603 - INFO - Loading data...
+2025-05-10 22:31:10,728 - INFO - Loaded data shapes: Train: torch.Size([50000, 3, 32, 32]), Test: torch.Size([10000, 3, 32, 32])
+2025-05-10 22:31:10,728 - INFO - Creating dataloaders...
+2025-05-10 22:31:10,813 - INFO - Created dataloaders - Training: 45000 samples, Validation: 5000 samples, Test: 10000 samples
+2025-05-10 22:31:10,813 - INFO - Initializing model...
+2025-05-10 22:31:11,361 - INFO - Model architecture:
+ConvAutoencoder(
+  (encoder): Sequential(
+    (0): Conv2d(3, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.2, inplace=True)
+    (3): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (4): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): LeakyReLU(negative_slope=0.2, inplace=True)
+    (6): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1))
+    (7): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (8): LeakyReLU(negative_slope=0.2, inplace=True)
+  )
+  (decoder): Sequential(
+    (0): ConvTranspose2d(128, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.2, inplace=True)
+    (3): ConvTranspose2d(64, 32, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): LeakyReLU(negative_slope=0.2, inplace=True)
+    (6): ConvTranspose2d(32, 3, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1))
+    (7): Sigmoid()
+  )
+)
+2025-05-10 22:31:11,361 - INFO - Starting model training...
+2025-05-10 22:31:11,361 - INFO - Starting training for 30 epochs
+2025-05-10 22:31:40,748 - INFO - Epoch [1/30], Train Loss: 0.011340, Val Loss: 0.005191, Time: 29.39s
+2025-05-10 22:31:40,753 - INFO - Saved best model at epoch 1 with validation loss: 0.005191
+2025-05-10 22:32:08,787 - INFO - Epoch [2/30], Train Loss: 0.004510, Val Loss: 0.003876, Time: 28.03s
+2025-05-10 22:32:08,790 - INFO - Saved best model at epoch 2 with validation loss: 0.003876
+2025-05-10 22:32:36,161 - INFO - Epoch [3/30], Train Loss: 0.003560, Val Loss: 0.003308, Time: 27.37s
+2025-05-10 22:32:36,163 - INFO - Saved best model at epoch 3 with validation loss: 0.003308
+2025-05-10 22:33:03,481 - INFO - Epoch [4/30], Train Loss: 0.003177, Val Loss: 0.002974, Time: 27.32s
+2025-05-10 22:33:03,483 - INFO - Saved best model at epoch 4 with validation loss: 0.002974
+2025-05-10 22:33:31,273 - INFO - Epoch [5/30], Train Loss: 0.002953, Val Loss: 0.002987, Time: 27.79s
+2025-05-10 22:33:58,808 - INFO - Epoch [6/30], Train Loss: 0.002793, Val Loss: 0.002724, Time: 27.53s
+2025-05-10 22:33:58,810 - INFO - Saved best model at epoch 6 with validation loss: 0.002724
+2025-05-10 22:34:26,440 - INFO - Epoch [7/30], Train Loss: 0.002700, Val Loss: 0.002954, Time: 27.63s
+2025-05-10 22:34:53,918 - INFO - Epoch [8/30], Train Loss: 0.002594, Val Loss: 0.002596, Time: 27.48s
+2025-05-10 22:34:53,920 - INFO - Saved best model at epoch 8 with validation loss: 0.002596
+2025-05-10 22:35:21,450 - INFO - Epoch [9/30], Train Loss: 0.002537, Val Loss: 0.002443, Time: 27.53s
+2025-05-10 22:35:21,452 - INFO - Saved best model at epoch 9 with validation loss: 0.002443
+2025-05-10 22:35:49,270 - INFO - Epoch [10/30], Train Loss: 0.002476, Val Loss: 0.002405, Time: 27.82s
+2025-05-10 22:35:49,272 - INFO - Saved best model at epoch 10 with validation loss: 0.002405
+2025-05-10 22:36:16,713 - INFO - Epoch [11/30], Train Loss: 0.002391, Val Loss: 0.002307, Time: 27.44s
+2025-05-10 22:36:16,716 - INFO - Saved best model at epoch 11 with validation loss: 0.002307
+2025-05-10 22:36:44,396 - INFO - Epoch [12/30], Train Loss: 0.002364, Val Loss: 0.002350, Time: 27.68s
+2025-05-10 22:37:11,933 - INFO - Epoch [13/30], Train Loss: 0.002344, Val Loss: 0.002258, Time: 27.54s
+2025-05-10 22:37:11,935 - INFO - Saved best model at epoch 13 with validation loss: 0.002258
+2025-05-10 22:37:39,494 - INFO - Epoch [14/30], Train Loss: 0.002291, Val Loss: 0.002237, Time: 27.56s
+2025-05-10 22:37:39,496 - INFO - Saved best model at epoch 14 with validation loss: 0.002237
+2025-05-10 22:38:06,946 - INFO - Epoch [15/30], Train Loss: 0.002260, Val Loss: 0.002176, Time: 27.45s
+2025-05-10 22:38:06,948 - INFO - Saved best model at epoch 15 with validation loss: 0.002176
+2025-05-10 22:38:34,395 - INFO - Epoch [16/30], Train Loss: 0.002232, Val Loss: 0.002248, Time: 27.45s
+2025-05-10 22:39:02,473 - INFO - Epoch [17/30], Train Loss: 0.002219, Val Loss: 0.002132, Time: 28.08s
+2025-05-10 22:39:02,475 - INFO - Saved best model at epoch 17 with validation loss: 0.002132
+2025-05-10 22:39:30,099 - INFO - Epoch [18/30], Train Loss: 0.002186, Val Loss: 0.002089, Time: 27.62s
+2025-05-10 22:39:30,102 - INFO - Saved best model at epoch 18 with validation loss: 0.002089
+2025-05-10 22:39:57,852 - INFO - Epoch [19/30], Train Loss: 0.002170, Val Loss: 0.002092, Time: 27.75s
+2025-05-10 22:40:25,565 - INFO - Epoch [20/30], Train Loss: 0.002125, Val Loss: 0.002264, Time: 27.71s
+2025-05-10 22:40:53,279 - INFO - Epoch [21/30], Train Loss: 0.002116, Val Loss: 0.002197, Time: 27.71s
+2025-05-10 22:41:21,032 - INFO - Epoch [22/30], Train Loss: 0.002093, Val Loss: 0.002091, Time: 27.75s
+2025-05-10 22:41:48,685 - INFO - Epoch [23/30], Train Loss: 0.002093, Val Loss: 0.001978, Time: 27.65s
+2025-05-10 22:41:48,687 - INFO - Saved best model at epoch 23 with validation loss: 0.001978
+2025-05-10 22:42:16,412 - INFO - Epoch [24/30], Train Loss: 0.002071, Val Loss: 0.001991, Time: 27.72s
+2025-05-10 22:44:49,322 - INFO - Epoch [25/30], Train Loss: 0.002047, Val Loss: 0.002119, Time: 152.91s
+2025-05-10 22:45:16,945 - INFO - Epoch [26/30], Train Loss: 0.002057, Val Loss: 0.002008, Time: 27.62s
+2025-05-10 22:45:44,463 - INFO - Epoch [27/30], Train Loss: 0.002059, Val Loss: 0.002013, Time: 27.52s
+2025-05-10 22:46:11,929 - INFO - Epoch [28/30], Train Loss: 0.002019, Val Loss: 0.001946, Time: 27.47s
+2025-05-10 22:46:11,931 - INFO - Saved best model at epoch 28 with validation loss: 0.001946
+2025-05-10 22:46:39,835 - INFO - Epoch [29/30], Train Loss: 0.002019, Val Loss: 0.002008, Time: 27.90s

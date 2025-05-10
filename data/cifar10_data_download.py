@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import os
+import ssl
 from torchvision import datasets, transforms
+
+# Temporarily disable SSL verification (use with caution)
+ssl._create_default_https_context = ssl._create_unverified_context
 
 def download_and_save_cifar10(data_dir='cifar10_data'):
     if not os.path.exists(data_dir):

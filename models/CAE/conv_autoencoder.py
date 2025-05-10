@@ -26,36 +26,38 @@ class ConvAutoencoder(nn.Module):
     def __init__(self):
         super(ConvAutoencoder, self).__init__()
         
-        # Encoder
+        # Encoder - Reduced number of layers and channels
         self.encoder = nn.Sequential(
             # First convolutional block
-            nn.Conv2d(3, 32, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(2, 2),  # 16x16
+            nn.Conv2d(3, 32, kernel_size=3, stride=2, padding=1),  # 16x16
+            nn.BatchNorm2d(32),
+            nn.LeakyReLU(0.2, inplace=True),
             
             # Second convolutional block
-            nn.Conv2d(32, 64, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(2, 2),  # 8x8
+            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1),  # 8x8
+            nn.BatchNorm2d(64),
+            nn.LeakyReLU(0.2, inplace=True),
             
             # Third convolutional block
-            nn.Conv2d(64, 128, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(2, 2),  # 4x4
+            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=1),  # 4x4
+            nn.BatchNorm2d(128),
+            nn.LeakyReLU(0.2, inplace=True),
         )
         
-        # Decoder
+        # Decoder - Simplified upsampling
         self.decoder = nn.Sequential(
-            # First transposed convolutional block
-            nn.ConvTranspose2d(128, 64, kernel_size=2, stride=2),  # 8x8
-            nn.ReLU(inplace=True),
+            # First upsampling block
+            nn.ConvTranspose2d(128, 64, kernel_size=4, stride=2, padding=1),  # 8x8
+            nn.BatchNorm2d(64),
+            nn.LeakyReLU(0.2, inplace=True),
             
-            # Second transposed convolutional block
-            nn.ConvTranspose2d(64, 32, kernel_size=2, stride=2),  # 16x16
-            nn.ReLU(inplace=True),
+            # Second upsampling block
+            nn.ConvTranspose2d(64, 32, kernel_size=4, stride=2, padding=1),  # 16x16
+            nn.BatchNorm2d(32),
+            nn.LeakyReLU(0.2, inplace=True),
             
-            # Third transposed convolutional block
-            nn.ConvTranspose2d(32, 3, kernel_size=2, stride=2),  # 32x32
+            # Final upsampling block
+            nn.ConvTranspose2d(32, 3, kernel_size=4, stride=2, padding=1),  # 32x32
             nn.Sigmoid()  # Output in range [0, 1]
         )
     
@@ -119,7 +121,7 @@ def create_dataloaders(x_train_clean, x_train_noisy, x_test_clean, x_test_noisy,
     
     return train_loader, val_loader, test_loader
 
-def train(model, train_loader, val_loader, criterion, optimizer, num_epochs=50, save_path='models/CAE'):
+def train(model, train_loader, val_loader, criterion, optimizer, num_epochs=30, save_path='models/CAE', scheduler=None):
     """Train the convolutional autoencoder"""
     # Create directories if they don't exist
     os.makedirs(save_path, exist_ok=True)
@@ -152,8 +154,8 @@ def train(model, train_loader, val_loader, criterion, optimizer, num_epochs=50, 
             
             running_loss += loss.item()
             
-            # Log progress
-            if (batch_idx + 1) % 100 == 0:
+            # Log progress less frequently
+            if (batch_idx + 1) % 200 == 0:
                 logging.info(f'Epoch [{epoch+1}/{num_epochs}], Batch [{batch_idx+1}/{len(train_loader)}], Loss: {loss.item():.6f}')
         
         epoch_train_loss = running_loss / len(train_loader)
@@ -171,6 +173,10 @@ def train(model, train_loader, val_loader, criterion, optimizer, num_epochs=50, 
         
         epoch_val_loss = val_loss / len(val_loader)
         val_losses.append(epoch_val_loss)
+        
+        # Update learning rate if scheduler is provided
+        if scheduler is not None:
+            scheduler.step(epoch_val_loss)
         
         epoch_time = time.time() - epoch_start_time
         
@@ -354,9 +360,9 @@ def main():
     # Configuration
     data_dir = 'cifar10_data'
     save_dir = 'models/CAE'
-    batch_size = 128
+    batch_size = 256  # Increased batch size for faster training
     learning_rate = 0.001
-    num_epochs = 50
+    num_epochs = 30  # Reduced number of epochs
     
     # Create directories
     os.makedirs(save_dir, exist_ok=True)
@@ -370,7 +376,7 @@ def main():
         logging.info("Loading data...")
         x_train_clean, x_train_noisy, x_test_clean, x_test_noisy = load_data(data_dir)
         
-        # Create dataloaders
+        # Create dataloaders with num_workers for faster data loading
         logging.info("Creating dataloaders...")
         train_loader, val_loader, test_loader = create_dataloaders(
             x_train_clean, x_train_noisy, x_test_clean, x_test_noisy,
@@ -382,6 +388,11 @@ def main():
         model = ConvAutoencoder().to(device)
         criterion = nn.MSELoss()
         optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+        
+        # Add learning rate scheduler for faster convergence
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode='min', factor=0.5, patience=5
+        )
         
         # Print model architecture
         model_summary = str(model)
@@ -396,7 +407,8 @@ def main():
             criterion,
             optimizer,
             num_epochs=num_epochs,
-            save_path=save_dir
+            save_path=save_dir,
+            scheduler=scheduler  # Add scheduler to training
         )
         
         # Load best model for evaluation

@@ -1,19 +1,19 @@
 Convolutional Autoencoder Evaluation Results
 ==========================================
 
-Test Loss: 0.004978
+Test Loss: 0.001941
 
 Mean Squared Error (MSE):
-  Noisy images: 0.009305
-  Denoised images: 0.004973
-  Improvement: 46.55%
+  Noisy images: 0.009302
+  Denoised images: 0.001941
+  Improvement: 79.13%
 
 Peak Signal-to-Noise Ratio (PSNR):
   Noisy images: 20.33 dB
-  Denoised images: 23.48 dB
-  Improvement: 3.15 dB
+  Denoised images: 27.33 dB
+  Improvement: 7.01 dB
 
 Structural Similarity Index (SSIM):
   Noisy images: 0.4598
-  Denoised images: 0.6382
-  Improvement: 17.84%
+  Denoised images: 0.8097
+  Improvement: 34.99%
